@@ -1,0 +1,391 @@
+Here are the key documents that senior developers create:
+
+---
+
+## 1. Technical Documentation
+
+| Document | What it covers |
+|---|---|
+| **README.md** | Project overview, setup, how to run |
+| **API Documentation** | Endpoints, request/response, auth |
+| **Architecture Document** | System design, tech stack decisions |
+| **Database Schema** | Tables, relationships, data types |
+| **Tech Stack Document** | Why each technology was chosen |
+
+---
+
+## 2. Planning Documents
+
+| Document | What it covers |
+|---|---|
+| **System Design Doc** | How the whole system is structured |
+| **Technical Specification** | Detailed breakdown of a feature before building |
+| **RFC (Request for Comments)** | Proposing a technical change for team review |
+| **Roadmap** | What gets built and when |
+| **Estimation Document** | Time and resource estimates per feature |
+
+---
+
+## 3. Process Documents
+
+| Document | What it covers |
+|---|---|
+| **Onboarding Guide** | How new devs set up and understand the project |
+| **Contribution Guide** | How to submit code, branch naming, PR rules |
+| **Code Review Checklist** | Standards every PR must meet |
+| **Git Workflow Doc** | Branching strategy (GitFlow, trunk-based, etc.) |
+| **Deployment Guide** | Step by step how to deploy the app |
+
+---
+
+## 4. Code-Level Documentation
+
+```javascript
+/**
+ * Authenticates a user and returns a JWT token
+ * 
+ * @param {string} email - User's email address
+ * @param {string} password - User's plain text password
+ * @returns {Promise<string>} JWT token
+ * @throws {AuthError} If credentials are invalid
+ */
+async function loginUser(email, password) {
+  // ...
+}
+```
+
+- **Inline comments** — explaining why, not what
+- **JSDoc / JavaDoc** — function signatures and descriptions
+- **Code changelog** — what changed and why
+
+---
+
+## 5. Security & Operations
+
+| Document | What it covers |
+|---|---|
+| **Security Policy** | How sensitive data is handled |
+| **Environment Variables Guide** | What each `.env` variable does |
+| **Incident Report** | What went wrong, root cause, fix applied |
+| **Postmortem** | Deep analysis after a major bug or outage |
+| **Runbook** | Step by step for handling known issues |
+
+---
+
+## 6. Testing Documents
+
+| Document | What it covers |
+|---|---|
+| **Test Plan** | What will be tested and how |
+| **Test Cases** | Specific scenarios and expected results |
+| **QA Checklist** | Manual checks before every release |
+| **Bug Report Template** | Consistent format for reporting issues |
+
+---
+
+## Most Important Ones to Start With
+
+If you're building a project right now, focus on these first:
+
+```
+1. README.md          — always, every project
+2. API Docs           — if you have a backend
+3. .env.example       — list all environment variables
+4. Architecture Doc   — even a simple diagram
+5. Deployment Guide   — so anyone can deploy it
+```
+
+---
+
+## Tools Senior Devs Use to Write These
+
+| Tool | Used For |
+|---|---|
+| **Notion** | Team wikis, planning docs |
+| **Confluence** | Enterprise documentation |
+| **Swagger / Postman** | API documentation |
+| **Draw.io / Excalidraw** | Architecture diagrams |
+| **GitHub Wiki** | Project-level docs |
+| **Markdown (.md files)** | README, guides inside the repo |
+
+---
+
+Here are the best resources for learning how to create developer documentation:
+
+---
+
+## Official Style Guides (Industry Standard)
+
+| Resource | What it covers |
+|---|---|
+| **Google Developer Documentation Style Guide** | Writing clear technical docs |
+| **Microsoft Writing Style Guide** | Technical writing standards |
+| **Apple Style Guide** | Clean, simple documentation writing |
+| **GitLab Documentation Style Guide** | Real-world open source doc standards |
+
+Links:
+- google.dev/style
+- docs.microsoft.com/style-guide
+- gitlab.com/gitlab-org/gitlab/-/tree/master/doc
+
+---
+
+## Learning Platforms
+
+| Platform | Course/Resource |
+|---|---|
+| **The Good Docs Project** | Free templates for every doc type |
+| **Write the Docs** | Community + guides for technical writers |
+| **Coursera** | Technical Writing courses (Google offers a free one) |
+| **freeCodeCamp** | Articles on writing README and API docs |
+
+---
+
+## For Specific Document Types
+
+### README
+- **makeareadme.com** — interactive README builder
+- **github.com/othneildrew/Best-README-Template** — most starred README template on GitHub
+
+### API Documentation
+- **swagger.io/docs** — Swagger/OpenAPI standard
+- **stoplight.io/api-documentation-guide** — complete API doc guide
+- **readme.com** — tool + learning resource
+
+### Architecture Diagrams
+- **c4model.com** — C4 model, industry standard for system diagrams
+- **arc42.org** — architecture documentation templates
+- **excalidraw.com** — free diagramming tool
+
+### Technical Writing
+- **developers.google.com/tech-writing** — free Google technical writing courses
+- **writethedocs.org/guide** — complete documentation guide
+
+---
+
+## Real World Examples to Reference
+
+Study how big projects document themselves:
+
+| Project | What to Study |
+|---|---|
+| **React (react.dev)** | How to write clear component docs |
+| **Stripe API docs** | Best API documentation in the industry |
+| **Twilio docs** | Great onboarding + API docs |
+| **Django docs** | Thorough backend documentation |
+| **Vercel docs** | Clean, modern deployment docs |
+| **Electron docs** | Relevant to your current project |
+
+---
+
+## Templates You Can Use Right Now
+
+### README Template
+```markdown
+# Project Name
+
+## Overview
+What does this project do?
+
+## Tech Stack
+- Frontend:
+- Backend:
+- Database:
+
+## Getting Started
+### Prerequisites
+### Installation
+### Running the app
+
+## API Reference
+## Environment Variables
+## Deployment
+## Contributing
+## License
+```
+
+### API Endpoint Template
+```markdown
+## POST /api/login
+
+Description: Authenticates a user and returns a JWT token
+
+### Request Body
+| Field    | Type   | Required | Description        |
+|----------|--------|----------|--------------------|
+| email    | string | Yes      | User email address |
+| password | string | Yes      | User password      |
+
+### Response
+| Status | Description          |
+|--------|----------------------|
+| 200    | Login successful     |
+| 401    | Invalid credentials  |
+| 500    | Server error         |
+
+### Example
+```json
+{
+  "email": "user@example.com",
+  "password": "secret123"
+}
+```
+```
+
+### Bug Report Template
+```markdown
+## Bug Report
+
+**Description:** What happened?
+**Expected:** What should have happened?
+**Steps to Reproduce:**
+1.
+2.
+3.
+**Environment:** OS, browser, app version
+**Screenshots:**
+```
+
+---
+
+## Tools to Write Documentation
+
+| Tool | Free | Best For |
+|---|---|---|
+| **Notion** | Yes | Team wikis and living docs |
+| **Docusaurus** | Yes | Building a full docs website |
+| **GitBook** | Free tier | Clean hosted documentation |
+| **Obsidian** | Yes | Personal knowledge base |
+| **Swagger UI** | Yes | Auto-generate API docs |
+| **Postman** | Free tier | API docs + testing |
+
+---
+
+## Best Starting Point
+
+If you want one place to start:
+
+```
+1. Read  → developers.google.com/tech-writing (free course, 2-3 hours)
+2. Use   → makeareadme.com for your first README
+3. Study → Stripe docs as the gold standard for API docs
+4. Join  → writethedocs.org community for ongoing learning
+```
+Here are the best resources specifically for project diagrams:
+
+---
+
+## Free Diagramming Tools
+
+| Tool | Best For | Link |
+|---|---|---|
+| **Excalidraw** | Quick sketchy-style diagrams | excalidraw.com |
+| **Draw.io (diagrams.net)** | All diagram types, free forever | diagrams.net |
+| **Lucidchart** | Professional diagrams, free tier | lucidchart.com |
+| **Mermaid.js** | Diagrams in code/markdown | mermaid.js.org |
+| **PlantUML** | UML diagrams in code | plantuml.com |
+| **Whimsical** | Flowcharts and wireframes | whimsical.com |
+
+---
+
+## Types of Diagrams Developers Make
+
+### 1. System Architecture Diagram
+Shows how all parts of your app connect:
+```
+[React Frontend] → [Express API] → [MongoDB]
+                              ↓
+                         [Electron App]
+```
+
+### 2. Flowchart
+Shows logic flow of a feature:
+```
+User Login → Validate Input → Check DB → 
+  Found? → Generate JWT → Return Token
+  Not Found? → Return 401
+```
+
+### 3. ERD (Entity Relationship Diagram)
+Shows database structure and relationships:
+```
+User ──< Orders >── Products
+```
+
+### 4. Sequence Diagram
+Shows how components talk to each other over time
+
+### 5. UML Class Diagram
+Shows classes, properties, and methods
+
+---
+
+## Best Standards to Follow
+
+| Standard | What it is | Resource |
+|---|---|---|
+| **C4 Model** | 4-level system architecture standard | c4model.com |
+| **UML** | Universal diagram language | uml.org |
+| **ERD (Crow's Foot)** | Database relationship notation | standard in most DB tools |
+| **BPMN** | Business process flow diagrams | bpmn.org |
+
+**C4 Model is most recommended** — it breaks your system into 4 levels:
+```
+Level 1 → System Context    (big picture)
+Level 2 → Container         (apps, databases)
+Level 3 → Component         (inside each container)
+Level 4 → Code              (classes, functions)
+```
+
+---
+
+## For Your MERN + Electron Project
+
+Here are the diagrams you should create:
+
+```
+1. Architecture Diagram   — React, Node, MongoDB, Electron connections
+2. API Flow Diagram       — how frontend calls backend routes
+3. Database ERD           — your MongoDB collections and relationships
+4. User Flow Diagram      — how a user moves through your app
+5. Deployment Diagram     — where each part is hosted
+```
+
+---
+
+## Resources to Learn Diagramming
+
+| Resource | What it covers |
+|---|---|
+| **c4model.com** | Best architecture diagram standard |
+| **lucidchart.com/blog** | Tutorials for every diagram type |
+| **draw.io YouTube channel** | How to use draw.io for dev diagrams |
+| **mermaid.js.org/intro** | Write diagrams in code inside markdown |
+| **github.com/plantuml** | UML diagrams as code |
+
+---
+
+## Mermaid.js Example (diagrams in code)
+
+You can write diagrams directly in your markdown docs:
+
+```mermaid
+graph TD
+    A[React Frontend] -->|HTTP Request| B[Express API]
+    B -->|Query| C[MongoDB]
+    B -->|Response| A
+    A -->|Loaded in| D[Electron App]
+```
+
+GitHub renders Mermaid diagrams automatically in `.md` files — great for keeping diagrams inside your repo.
+
+---
+
+## Quick Start Recommendation
+
+```
+Quickest       → Excalidraw (no signup, draw instantly)
+Most powerful  → Draw.io (free, export anywhere)
+Best for docs  → Mermaid.js (lives inside your markdown)
+Best standard  → Follow C4 Model for architecture
+```

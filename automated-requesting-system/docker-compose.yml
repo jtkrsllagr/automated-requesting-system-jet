@@ -1,0 +1,104 @@
+services:
+
+  # ── PHP + Apache ──
+  app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: ars_app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env.docker
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      # Only uploads are mounted as a volume — persists files across rebuilds.
+      # The project code is baked into the image via COPY in the Dockerfile.
+      # DO NOT mount the whole project (. :) here — Windows has lowercase
+      # app/helpers/ which would overwrite the correctly-cased image filesystem.
+      - uploads_data:/var/www/automated-requesting-system/public/uploads
+      - storage_data:/var/www/automated-requesting-system/storage
+      - print_archives_data:/var/www/automated-requesting-system/storage/print-archives
+      - tls_certs:/etc/ars-certs
+      # For a trusted Tailscale cert, replace tls_certs above with these two
+      # read-only mounts. Apply the same change to the realtime service below.
+      # - ./docker/certs/ars-selfsigned.crt:/etc/ars-certs/ars-selfsigned.crt:ro
+      # - ./docker/certs/ars-selfsigned.key:/etc/ars-certs/ars-selfsigned.key:ro
+    networks:
+      - ars_net
+
+  realtime:
+    build:
+      context: ./realtime
+      dockerfile: Dockerfile
+    container_name: ars_realtime
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_started
+    ports:
+      - "8443:8443"
+    volumes:
+      - tls_certs:/certs:ro
+      - storage_data:/shared-storage:ro
+      # For a trusted Tailscale cert, replace tls_certs above with these two
+      # read-only mounts. Use the same certificate/key as the app service.
+      # - ./docker/certs/ars-selfsigned.crt:/certs/ars-selfsigned.crt:ro
+      # - ./docker/certs/ars-selfsigned.key:/certs/ars-selfsigned.key:ro
+    networks:
+      - ars_net
+
+  # ── MariaDB ──
+  db:
+    image: mariadb:11
+    container_name: ars_db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: arsdb
+      MARIADB_USER: ars_user
+      MARIADB_PASSWORD: ars_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./docker/initdb:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ars_net
+
+  # ── phpMyAdmin ──
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: ars_phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8080:80"
+    networks:
+      - ars_net
+
+volumes:
+  db_data:
+  uploads_data:
+  storage_data:
+  print_archives_data:
+  tls_certs:
+
+networks:
+  ars_net:
+    driver: bridge

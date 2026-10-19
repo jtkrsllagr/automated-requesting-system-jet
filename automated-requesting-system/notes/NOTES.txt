@@ -1,0 +1,134 @@
+-- Features to Implement --
+Advance Payment Form
+Overtime Authorization Form
+Request for Payment Form
+Leave Application Form
+Reimbursement Form
+Liquidation Form
+Vehicle Request Form
+
+-- Initialize Composer & Install Dependencies --
+composer init --name="sme/automated-requesting-system" --type=project --no-interaction
+composer require vlucas/phpdotenv phpmailer/phpmailer
+
+-- Account Security
+echo password_hash('yourpassword', PASSWORD_BCRYPT, ['cost' => 12]);
+
+password_hash - This is a built-in PHP function that:
+Takes a plain-text password
+Returns a secure hashed version of it
+
+BCRYPT is a strong, industry-standard hashing algorithm
+
+cost controls how computationally expensive the hashing is
+Higher cost = more secure but slower
+
+Typical values:
+
+10 = default (balanced)
+12 = more secure (slower, but still practical)
+14+ = very slow (usually unnecessary)
+
+"C:\xampp\php\php.exe" -r "echo password_hash('yourpassword', PASSWORD_BCRYPT, ['cost' => 12]);"
+
+.env
+APP_NAME=AutomatedRequestingSystem
+APP_ENV=local
+APP_URL=http://localhost/automated-requesting-system/public
+
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=arsb
+DB_USERNAME=root
+DB_PASSWORD=
+
+
+Activate session.cookie_secure
+verify in C:\xampp\apache\conf\extra\httpd-ssl.conf
+<VirtualHost _default_:443>
+    DocumentRoot "C:/xampp/htdocs"
+    ServerName localhost:443
+    SSLEngine on
+    SSLCertificateFile "conf/ssl.crt/server.crt"
+    SSLCertificateKeyFile "conf/ssl.key/server.key"
+</VirtualHost>
+
+verify
+LoadModule ssl_module modules/mod_ssl.so
+Include conf/extra/httpd-ssl.conf
+
+.htaccess File
+RewriteEngine On
+# Redirect HTTP to HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+.env File
+APP_URL=https://localhost/automated-requesting-system/public
+
+app.php
+ini_set('session.cookie_secure', 1);
+
+Trust the self-signed cert in your browser
+Since XAMPP uses a self-signed cert, any browser will show a warning on first visit to https://localhost.
+Chrome/Edge: click "Advanced" → "Proceed to localhost"
+To permanently trust it: open C:\xampp\apache\conf\ssl.crt\server.crt → double-click → "Install Certificate" → "Local Machine" → "Trusted Root Certification Authorities"
+
+CSP header in public/index.php
+header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; upgrade-insecure-requests;");
+
+Production note
+On a real server (cPanel, VPS, etc.), replace the self-signed cert with a free Let's Encrypt cert. The session.cookie_secure line stays exactly the same — no code change needed when you go live.
+
+### Passsword
+rasj bdwt nfkl mnko
+
+### MySQL
+ SELECT id, full_name, username, email, role_id FROM employees ORDER BY role_id;  // Get the Data Tables
+
+ UPDATE employees SET username = 'your username' WHERE id = 1; // CREATING username direct to cli
+
+
+ ### Employee Creation Error
+ Failed to create employee: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'default.png' for key 'avatar'
+ solutions: `ALTER TABLE employees DROP INDEX avatar;
+
+ ### Docker Backup
+```
+$date = Get-Date -Format "yyyy-MM-dd"
+$backupDir = "backup_$date"
+New-Item -ItemType Directory -Path $backupDir
+
+$backupPath = "$PWD\$backupDir"
+
+# Database
+docker exec ars_db mariadb-dump -u root -proot arsdb > "$backupDir\arsdb.sql"
+
+# Volumes
+docker run --rm -v automated-requesting-system_uploads_data:/data -v "${backupPath}:/backup" alpine tar czf /backup/uploads.tar.gz -C /data .
+docker run --rm -v automated-requesting-system_storage_data:/data -v "${backupPath}:/backup" alpine tar czf /backup/storage.tar.gz -C /data .
+
+# App image
+docker save automated-requesting-system-app -o "$backupDir\app_image.tar"
+
+Write-Host "Backup done -> $backupDir"
+
+```
+- create restore.ps1
+
+```
+param([string]$backupDir)
+
+docker load -i "$backupDir\app_image.tar"
+docker compose up -d db
+Start-Sleep -Seconds 15
+docker exec -i ars_db mariadb -u root -proot arsdb < "$backupDir\arsdb.sql"
+docker run --rm -v automated-requesting-system_uploads_data:/data -v "${PWD}/$backupDir:/backup" alpine tar xzf /backup/uploads.tar.gz -C /data
+docker run --rm -v automated-requesting-system_storage_data:/data -v "${PWD}/$backupDir:/backup" alpine tar xzf /backup/storage.tar.gz -C /data
+docker compose up -d
+
+Write-Host "Restore done"
+```
+
+- run this: 
+``` .\restore.ps1 -backupDir "backup_2025-07-14" ```

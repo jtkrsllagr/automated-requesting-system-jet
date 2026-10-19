@@ -1,0 +1,5 @@
+# public/uploads/forms/.htaccess
+Options -Indexes
+<FilesMatch "\.php$">
+    Deny from all
+</FilesMatch>
